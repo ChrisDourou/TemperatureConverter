@@ -4,77 +4,90 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public class TemperatureConverter {
     public static void main(String[] args) {
-        // Ενεργοποίηση του Look and Feel του συστήματος
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // Δημιουργία του frame
         JFrame frame = new JFrame("Μετατροπή Θερμοκρασίας");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 250);
-        frame.setLayout(new BorderLayout(10, 10)); // Αφήνει κενά μεταξύ των στοιχείων
+        frame.setSize(450, 250);
+        frame.setLayout(new GridLayout(4, 2, 10, 10));
 
-        // Δημιουργία panel για τα στοιχεία με padding
-        JPanel mainPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Εσωτερικό padding
-
-        // Δημιουργία ετικετών, πεδίων, κουμπιού και επιλογών
-        JLabel inputLabel = new JLabel("Εισαγωγή Θερμοκρασίας:");
-        inputLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        // Δημιουργία στοιχείων UI
+        JLabel inputLabel = new JLabel("Εισαγωγή θερμοκρασίας:");
         JTextField inputField = new JTextField();
-        JLabel resultLabel = new JLabel("Αποτέλεσμα:");
-        resultLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        JTextField resultField = new JTextField();
-        resultField.setEditable(false); // Μόνο για ανάγνωση
-        JLabel typeLabel = new JLabel("Επιλέξτε μετατροπή:");
-        typeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        String[] conversionTypes = {"Fahrenheit σε Celsius", "Celsius σε Fahrenheit"};
-        JComboBox<String> conversionBox = new JComboBox<>(conversionTypes);
+        
+        JLabel outputLabel = new JLabel("Αποτέλεσμα:");
+        JTextField outputField = new JTextField();
+        outputField.setEditable(false); // Μόνο για ανάγνωση
+        
+        JLabel conversionLabel = new JLabel("Επιλογή μετατροπής:");
+        
+        // Ταξινομημένη λίστα μετατροπών
+        String[] options = {
+            "Celsius → Fahrenheit", 
+            "Celsius → Kelvin",
+            "Fahrenheit → Celsius", 
+            "Fahrenheit → Kelvin", 
+            "Kelvin → Celsius", 
+            "Kelvin → Fahrenheit"
+        };
+        
+        JComboBox<String> conversionBox = new JComboBox<>(options);
+
         JButton convertButton = new JButton("Μετατροπή");
 
-        // Προσθήκη action listener στο κουμπί
+        // Action Listener για μετατροπή
         convertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // Αντικατάσταση κόμματος με τελεία για σωστή μετατροπή αριθμού
-                    String inputText = inputField.getText().replace(",", ".");
-                    double inputTemp = Double.parseDouble(inputText);
-                    double resultTemp;
-                    String conversionType = (String) conversionBox.getSelectedItem();
+                    String selectedConversion = (String) conversionBox.getSelectedItem();
+                    double inputTemp = Double.parseDouble(inputField.getText().replace(",", "."));
+                    double result = 0;
 
-                    // Έλεγχος τύπου μετατροπής
-                    if ("Fahrenheit σε Celsius".equals(conversionType)) {
-                        resultTemp = (inputTemp - 32) * 5 / 9;
-                    } else { // Celsius σε Fahrenheit
-                        resultTemp = (inputTemp * 9 / 5) + 32;
+                    // Επιλογές μετατροπής
+                    switch (selectedConversion) {
+                        case "Celsius → Fahrenheit":
+                            result = (inputTemp * 9 / 5) + 32;
+                            break;
+                        case "Celsius → Kelvin":
+                            result = inputTemp + 273.15;
+                            break;
+                        case "Fahrenheit → Celsius":
+                            result = (inputTemp - 32) * 5 / 9;
+                            break;
+                        case "Fahrenheit → Kelvin":
+                            result = (inputTemp - 32) * 5 / 9 + 273.15;
+                            break;
+                        case "Kelvin → Celsius":
+                            result = inputTemp - 273.15;
+                            break;
+                        case "Kelvin → Fahrenheit":
+                            result = (inputTemp - 273.15) * 9 / 5 + 32;
+                            break;
                     }
 
-                    resultField.setText(String.format("%.2f", resultTemp));
+                    // Μορφοποίηση αποτελέσματος
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    outputField.setText(df.format(result));
+
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Παρακαλώ εισάγετε έναν έγκυρο αριθμό!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Παρακαλώ εισάγετε έγκυρο αριθμό!", "Σφάλμα", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        // Προσθήκη στοιχείων στο panel
-        mainPanel.add(typeLabel);
-        mainPanel.add(conversionBox);
-        mainPanel.add(inputLabel);
-        mainPanel.add(inputField);
-        mainPanel.add(resultLabel);
-        mainPanel.add(resultField);
-        mainPanel.add(new JLabel()); // Κενό για καλύτερη διάταξη
-        mainPanel.add(convertButton);
-
-        // Προσθήκη panel στο frame
-        frame.add(mainPanel, BorderLayout.CENTER);
+        // Προσθήκη στοιχείων στο frame
+        frame.add(inputLabel);
+        frame.add(inputField);
+        frame.add(conversionLabel);
+        frame.add(conversionBox);
+        frame.add(outputLabel);
+        frame.add(outputField);
+        frame.add(new JLabel()); // Κενό για διάταξη
+        frame.add(convertButton);
 
         // Εμφάνιση παραθύρου
         frame.setVisible(true);
