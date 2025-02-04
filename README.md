@@ -1,11 +1,11 @@
 ## **Temperature Converter**
 
-A simple Java GUI application that converts temperatures between Fahrenheit and Celsius.
+A simple Java GUI application that converts temperatures between Celsius, Fahrenheit and Kelvin.
 
 ---
 
 ### **Features**
-- Convert temperatures between Fahrenheit and Celsius.
+- Temperature Conversion.
 - User-friendly graphical interface (using Swing).
 - Handles invalid inputs gracefully with error messages.
 - Supports decimal inputs with both a period (`.`) or comma (`,`).
@@ -57,7 +57,7 @@ A simple Java GUI application that converts temperatures between Fahrenheit and 
 (Not yet) :)
 
 ### **To-Do / Future Features**
-- Add support for additional temperature scales (e.g., Kelvin).
+- ~~Add support for additional temperature scales (e.g., Kelvin). ~~
 - Improve UI design with modern frameworks like JavaFX.
 - Create a standalone `.exe` version for easier distribution.
 
