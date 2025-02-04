@@ -57,7 +57,7 @@ A simple Java GUI application that converts temperatures between Celsius, Fahren
 (Not yet) :)
 
 ### **To-Do / Future Features**
-- ~~Add support for additional temperature scales (e.g., Kelvin). ~~
+- ~~Add support for additional temperature scales (e.g., Kelvin).~~
 - Improve UI design with modern frameworks like JavaFX.
 - Create a standalone `.exe` version for easier distribution.
 
